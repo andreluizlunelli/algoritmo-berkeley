@@ -25,26 +25,30 @@ public class BerkeleyServer {
 			server.socket = new ServerSocket(PORT_SERVER);
 			for (;;) {
 				Socket client = server.socket.accept();
-				
-				ReturnBerkleyServer returnBerkleyServer = server.requestAccepted(client);
+				BerkleyServerReturn returnBerkleyServer = server.requestAccepted(client);
+				returnBerkleyServer.socketReturn();
 			}
 			
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return server;
 	}
 	
-	private ReturnBerkleyServer requestAccepted(Socket client) throws IOException {
+	private BerkleyServerReturn requestAccepted(Socket client) throws IOException {
 		addClient(client);
 		
-		Scanner leitura = new Scanner(client.getInputStream());
-		int nextInt = leitura.nextInt();
+		BerkleyServerReturn serverReturn = new BerkleyServerReturn();
+		serverReturn.addParam("retorno", "ok");
 		
-		System.out.println("mandou um "+nextInt);
 		
-		return null;
+//		Scanner leitura = new Scanner(client.getInputStream());
+//		int nextInt = leitura.nextInt();
+//		System.out.println("mandou um "+nextInt);
+
+		
+		
+		return serverReturn;
 	}
 
 	private void addClient(Socket socket) throws IOException {

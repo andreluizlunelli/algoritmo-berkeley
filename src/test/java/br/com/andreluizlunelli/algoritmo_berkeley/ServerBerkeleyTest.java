@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.Scanner;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -28,6 +29,10 @@ public class ServerBerkeleyTest {
 			Socket client = new Socket("127.0.0.1", 9999);
 			PrintStream printer = new PrintStream(client.getOutputStream());
 			printer.println(1);
+			
+			Scanner serverReturn = new Scanner(client.getInputStream());
+			String nextLine = serverReturn.nextLine();
+			System.out.println(nextLine);
 			
 			
 			
