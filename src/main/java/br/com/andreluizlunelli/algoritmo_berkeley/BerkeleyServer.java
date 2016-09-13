@@ -7,6 +7,7 @@ import java.net.Socket;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Scanner;
 import java.util.Set;
 
 public class BerkeleyServer {
@@ -23,8 +24,9 @@ public class BerkeleyServer {
 		try {
 			server.socket = new ServerSocket(PORT_SERVER);
 			for (;;) {
-				Socket socket = server.socket.accept();
-				ReturnBerkleyServer returnBerkleyServer = server.requestAccepted(socket);
+				Socket client = server.socket.accept();
+				
+				ReturnBerkleyServer returnBerkleyServer = server.requestAccepted(client);
 			}
 			
 		} catch (IOException e) {
@@ -34,9 +36,14 @@ public class BerkeleyServer {
 		return server;
 	}
 	
-	private ReturnBerkleyServer requestAccepted(Socket socket) throws IOException {
-		addClient(socket);
-		//... 
+	private ReturnBerkleyServer requestAccepted(Socket client) throws IOException {
+		addClient(client);
+		
+		Scanner leitura = new Scanner(client.getInputStream());
+		int nextInt = leitura.nextInt();
+		
+		System.out.println("mandou um "+nextInt);
+		
 		return null;
 	}
 
