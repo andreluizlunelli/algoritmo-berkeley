@@ -31,9 +31,15 @@ public class ServerBerkeleyTest {
 			printer.println(1);
 			
 			Scanner serverReturn = new Scanner(client.getInputStream());
-			String nextLine = serverReturn.nextLine();
+			String nextLine = null;
+			while (serverReturn.hasNext()) {
+				nextLine = serverReturn.nextLine();				
+			}
 			System.out.println(nextLine);
-			
+			ParseReturn parser = new ParseReturn(nextLine);
+			String value = parser.getValue("retorno");
+			System.out.println("Valor: "+value);
+
 			
 			
 		} catch (UnknownHostException e) {

@@ -1,22 +1,35 @@
 package br.com.andreluizlunelli.algoritmo_berkeley;
 
+import java.io.IOException;
+import java.io.PrintStream;
+import java.net.Socket;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
 public class BerkleyServerReturn {
 	private HashMap<String, String> params = new HashMap<String, String>();
+	private Socket client;
+	
+	public BerkleyServerReturn(Socket client) {
+		this.client = client;
+	}
 	
 	/**
 	 * Escrever no console e cliente
 	 */
 	public void socketReturn() {
 		Iterator it = params.entrySet().iterator();
-		while (it.hasNext()) {
-			Map.Entry pair = (Map.Entry)it.next();
-			String _return = String.format("%s:%s,", pair.getKey(), pair.getValue());
-			System.out.println(_return);
-		}
+		try {
+			PrintStream printer = new PrintStream(client.getOutputStream());
+			while (it.hasNext()) {
+				Map.Entry pair = (Map.Entry)it.next();
+				String _return = String.format("%s:%s,", pair.getKey(), pair.getValue());
+					printer.println(_return);
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}			
 		
 	}
 	

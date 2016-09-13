@@ -37,8 +37,7 @@ public class BerkeleyServer {
 	
 	private BerkleyServerReturn requestAccepted(Socket client) throws IOException {
 		addClient(client);
-		
-		BerkleyServerReturn serverReturn = new BerkleyServerReturn();
+		BerkleyServerReturn serverReturn = new BerkleyServerReturn(client);
 		serverReturn.addParam("retorno", "ok");
 		
 		
