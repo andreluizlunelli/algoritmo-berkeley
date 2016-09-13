@@ -1,0 +1,4 @@
+trabalho
+1 servidor 3 clientes
+os clientes conectam no servidor, o servidor que manda a mensagem de sincronismo de tempo(ai acontece aqueles random)
+ele envia a quantidade que o relogio do cliente deve se ajustar
