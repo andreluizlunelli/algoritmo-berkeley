@@ -18,7 +18,7 @@ public class BerkeleyServer {
 	private BerkeleyServer() {
 	}
 	
-	public static void start() {
+	public static BerkeleyServer start() {
 		BerkeleyServer server = new BerkeleyServer();
 		try {
 			server.socket = new ServerSocket(PORT_SERVER);
@@ -31,6 +31,7 @@ public class BerkeleyServer {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		return server;
 	}
 	
 	private ReturnBerkleyServer requestAccepted(Socket socket) throws IOException {
@@ -43,5 +44,14 @@ public class BerkeleyServer {
 		Client client = new Client(socket.getInetAddress().getHostName(), new PrintStream(socket.getOutputStream()));
 		mapClients.put(client.getHost(), client);
 	}
+
+	public HashMap<String, Client> getMapClients() {
+		return mapClients;
+	}
+
+	public void setMapClients(HashMap<String, Client> mapClients) {
+		this.mapClients = mapClients;
+	}
+	
 
 }
