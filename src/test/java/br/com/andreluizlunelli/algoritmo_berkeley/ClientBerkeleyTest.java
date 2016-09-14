@@ -7,19 +7,29 @@ import org.junit.Assert;
 import org.junit.Test;
 
 public class ClientBerkeleyTest {
+
+	
+	private static final String FUNCTION_TIME_ACTUAL = "funcao:tempo_atual,";
+
+	@Test
+	/**
+	 * Teste: valida o metodo de alterar senha
+	 */
+	public void test01() {				
+		Timestamp currentTimestamp = new java.sql.Timestamp(Calendar.getInstance().getTime().getTime()); // pega o timestamp atual		
+		ClientBerkeley client = new ClientBerkeley();
+		Timestamp myDateChanged = client.whyMyTime();
+		Assert.assertNotNull(myDateChanged);			
+		Assert.assertNotEquals(currentTimestamp, myDateChanged); // se a data estiver diferente, o metodo esta funcionando
+	}
 	
 	@Test
-	public void test01() {		
-		// pega o timestamp atual
-		Timestamp currentTimestamp = new java.sql.Timestamp(Calendar.getInstance().getTime().getTime());		
+	/**
+	 * Teste: simula o cliente recebendo uma requisição do server com a mensagem de retornar tempo atual
+	 */
+	public void test02() {
 		ClientBerkeley client = new ClientBerkeley();
-		Timestamp myDateChanged = client.whyYourTime();
-//		if (myDateChanged == null) {
-////			deu erro 
-//			return;
-//		}
-	
-		Assert.assertNotNull(myDateChanged);			
-		Assert.assertNotEquals(currentTimestamp, myDateChanged);
+		MakeParams params = client.makeProcessRequest(FUNCTION_TIME_ACTUAL);
+		// tenho que retornar esses parametros para o server
 	}
 }

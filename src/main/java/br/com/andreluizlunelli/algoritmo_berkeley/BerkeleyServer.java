@@ -43,7 +43,7 @@ public class BerkeleyServer {
 		BerkleyServerReturn serverReturn = new BerkleyServerReturn(client);
 		serverReturn.addParam("tempo", "3");
 		serverReturn.addParam("sentido", ">");
-		
+		// tem que fazer os ifs de resposta do cliente 
 		
 		
 		return serverReturn;
