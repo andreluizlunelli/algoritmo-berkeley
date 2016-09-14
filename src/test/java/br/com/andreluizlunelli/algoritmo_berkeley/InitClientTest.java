@@ -6,27 +6,8 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.Scanner;
 
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
-
-import junit.framework.Assert;
-
-public class ServerBerkeleyTest {
-	
-//	@BeforeClass
-//	public static void initServer() {
-//		new Thread() {
-//			@Override
-//			public void run() {				
-//				BerkeleyServer.start();				
-//			}
-//		}.start();
-//	}
-
-	// TODO enviar a hora hh:mm:ss
-	
-	public void connectInServerTest() {
+public class InitClientTest {
+	public static void main(String[] args) {
 		try {			
 			Socket client = new Socket("127.0.0.1", 9999);
 			PrintStream printer = new PrintStream(client.getOutputStream());
@@ -48,13 +29,6 @@ public class ServerBerkeleyTest {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
-	}
-	
-//	@Test
-	public void test02() {
-		// TODO fazer teste de pergunta aos clientes sobre qual é a idade deles
-	}
 
-	
+	}
 }

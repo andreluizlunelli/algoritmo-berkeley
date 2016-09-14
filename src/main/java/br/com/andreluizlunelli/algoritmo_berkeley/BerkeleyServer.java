@@ -12,6 +12,9 @@ import java.util.Set;
 
 public class BerkeleyServer {
 
+	public static String K_TIME = "tempo";
+	public static String K_DIRECTION = "direcao";	
+	
 	private ServerSocket socket;
 	private static final int PORT_SERVER = 9999;
 	private HashMap<String, Client> mapClients = new HashMap<String, Client>();
@@ -38,13 +41,9 @@ public class BerkeleyServer {
 	private BerkleyServerReturn requestAccepted(Socket client) throws IOException {
 		addClient(client);
 		BerkleyServerReturn serverReturn = new BerkleyServerReturn(client);
-		serverReturn.addParam("retorno", "ok");
+		serverReturn.addParam("tempo", "3");
+		serverReturn.addParam("sentido", ">");
 		
-		
-//		Scanner leitura = new Scanner(client.getInputStream());
-//		int nextInt = leitura.nextInt();
-//		System.out.println("mandou um "+nextInt);
-
 		
 		
 		return serverReturn;

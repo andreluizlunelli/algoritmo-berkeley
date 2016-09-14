@@ -22,11 +22,12 @@ public class BerkleyServerReturn {
 		Iterator it = params.entrySet().iterator();
 		try {
 			PrintStream printer = new PrintStream(client.getOutputStream());
+			String _return = "";
 			while (it.hasNext()) {
 				Map.Entry pair = (Map.Entry)it.next();
-				String _return = String.format("%s:%s,", pair.getKey(), pair.getValue());
-					printer.println(_return);
+				_return += String.format("%s:%s,", pair.getKey(), pair.getValue());
 			}
+			printer.println(_return);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}			
