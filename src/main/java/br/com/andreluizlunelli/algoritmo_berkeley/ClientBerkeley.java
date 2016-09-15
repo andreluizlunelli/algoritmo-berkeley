@@ -11,10 +11,11 @@ import java.util.Scanner;
 
 public class ClientBerkeley {
 	
-	private static final String IP_SERVER = "127.0.0.1";
-	private static final int PORT_SERVER = 9999;
-	private static final String FUNCTION_RECEIVE = "funcao";
-	private static final String FUNCTION_TYPE_TIME_ACTUAL = "funcao";
+	public static final String IP_SERVER = "127.0.0.1";
+	public static final int PORT_SERVER = 9999;
+	public static final String FUNCTION_RECEIVE = "funcao";
+	public static final String FUNCTION_TYPE_TIME_ACTUAL = "qual_seu_tempo";
+	public static final String FUNCTION_TYPE_TIME_ACTUAL_RESPONSE = "qual_seu_tempo_resposta";
 
 	public static void main(String[] args) {
 		ClientBerkeley client = new ClientBerkeley();
@@ -23,15 +24,15 @@ public class ClientBerkeley {
 
 	public void connect() {
 		try {			
-			Socket client = new Socket(IP_SERVER, PORT_SERVER);
-			PrintStream printer = new PrintStream(client.getOutputStream());
-			printer.println(1); // manda um valor qualquer para se conectar
-			Scanner serverReturn = new Scanner(client.getInputStream());
+			Socket server = new Socket(IP_SERVER, PORT_SERVER);
+			PrintStream printer = new PrintStream(server.getOutputStream());
+			printer.println("c:1,"); // manda um valor para se conectar
+			Scanner serverReturn = new Scanner(server.getInputStream());
 			String nextLine = null;
 			while (serverReturn.hasNext()) { // fica escutando o server até ele morrer
 				nextLine = serverReturn.nextLine();				
-				MakeParams paramsToReturn = makeProcessRequest(nextLine);
-				// tenho que retornar para o server				
+				ClientBerkleyReturn _return = (ClientBerkleyReturn) makeProcessRequest(nextLine); // tenho que fazer um construtor que receba o makeParams 
+				_return.socketReturn();
 			}
 		} catch (UnknownHostException e) {
 			e.printStackTrace();
@@ -66,6 +67,7 @@ public class ClientBerkeley {
 		if (value == FUNCTION_TYPE_TIME_ACTUAL) { // está perguntando a data atual para o cliente
 			Timestamp myTime = whyMyTime();
 			params.addParam("tempo", myTime.toString());
+			params.addParam(FUNCTION_RECEIVE, FUNCTION_TYPE_TIME_ACTUAL_RESPONSE);
 		}
 		return params;
 	}

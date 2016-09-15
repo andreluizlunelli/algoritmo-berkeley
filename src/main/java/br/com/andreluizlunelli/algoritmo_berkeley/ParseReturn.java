@@ -15,12 +15,30 @@ public class ParseReturn {
 	private void parse(String string) {
 		String[] commaSplit = return_.split(",");
 		for (String paramStr : commaSplit) {
-			String[] split = paramStr.split(":");
+			String[] split = internalSplitKeyValue(paramStr);			
 			params.put(split[0], split[1]);
 		}
 	}
 	
 	public String getValue(String key) {
 		return params.get(key);
+	}
+	
+	private String[] internalSplitKeyValue(String paramStr) {
+		String[] split = paramStr.split(":");
+		String[] keyValue = new String[2];
+		int i = 0;
+		try {
+			keyValue[i] = split[i];
+		} catch (ArrayIndexOutOfBoundsException e) {
+			keyValue[i] = null;
+		}
+		i = 1;
+		try {
+			keyValue[i] = split[i];
+		} catch (ArrayIndexOutOfBoundsException e) {
+			keyValue[i] = null;
+		}
+		return keyValue;
 	}
 }

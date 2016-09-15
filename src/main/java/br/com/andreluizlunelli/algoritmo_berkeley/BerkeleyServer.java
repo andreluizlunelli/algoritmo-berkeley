@@ -19,6 +19,11 @@ public class BerkeleyServer {
 	private static final int PORT_SERVER = 9999;
 	private HashMap<String, Client> mapClients = new HashMap<String, Client>();
 	
+	public static void main(String[] args) {
+		BerkeleyServer server = new BerkeleyServer();
+		server.start();
+	}
+	
 	private BerkeleyServer() {
 	}
 	
@@ -40,9 +45,24 @@ public class BerkeleyServer {
 	
 	private BerkleyServerReturn requestAccepted(Socket client) throws IOException {
 		addClient(client);
+		System.out.println("Passou pelo requestAccepted");
+		
+		// TODO in progress
 		BerkleyServerReturn serverReturn = new BerkleyServerReturn(client);
-		serverReturn.addParam("tempo", "3");
-		serverReturn.addParam("sentido", ">");
+		Scanner reader = new Scanner(client.getInputStream());
+		String requestMessage = reader.nextLine();
+		ParseReturn parser = new ParseReturn(requestMessage);		
+		String message = parser.getValue(ClientBerkeley.FUNCTION_RECEIVE);
+		if (ClientBerkeley.FUNCTION_TYPE_TIME_ACTUAL_RESPONSE.equals(message)) {
+			System.out.println("ClientBerkeley.FUNCTION_TYPE_TIME_ACTUAL_RESPONSE");
+			System.out.println("Tempo respondido: "+parser.getValue("tempo"));
+		}
+		
+		serverReturn.addParam(ClientBerkeley.FUNCTION_TYPE_TIME_ACTUAL, "");
+
+		// mais ou menos isso aqui tem que enviar de tantos tem tantos tempos p todos os clientes		
+//		serverReturn.addParam("tempo", "3");
+//		serverReturn.addParam("sentido", ">");
 		// tem que fazer os ifs de resposta do cliente 
 		
 		
@@ -60,7 +80,6 @@ public class BerkeleyServer {
 
 	public void setMapClients(HashMap<String, Client> mapClients) {
 		this.mapClients = mapClients;
-	}
-	
+	}	
 
 }
