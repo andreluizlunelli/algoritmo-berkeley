@@ -18,7 +18,10 @@ public class BerkeleyServer {
 
 	// chaves utilizadas para padronizar o retorno
 	public static String K_TIME = "tempo";
-	public static String K_DIRECTION = "direcao";	
+	public static String K_DIRECTION = "direcao";
+	public static String K_ADJUSTMENT = "ajuste";
+	public static String K_DIRECTION_MORE = ">";
+	public static String K_DIRECTION_LESS = "<";
 	
 	private ServerSocket socket;
 	private static final int PORT_SERVER = 9999;
@@ -58,15 +61,15 @@ public class BerkeleyServer {
 		String requestMessage = reader.nextLine();
 		ParseReturn parser = new ParseReturn(requestMessage);		
 		String message = parser.getValue(ClientBerkeley.FUNCTION_RECEIVE);
-		if (ClientBerkeley.FUNCTION_TYPE_TIME_ACTUAL_RESPONSE.equals(message)) {
+		if (ClientBerkeley.FUNCTION_TYPE_CHANGE_MY_DATE_RESPONSE.equals(message)) {
 			System.out.println("ClientBerkeley.FUNCTION_TYPE_TIME_ACTUAL_RESPONSE");
 			System.out.println("Tempo respondido: "+parser.getValue("tempo"));
 		}
 		
-		serverReturn.addParam(ClientBerkeley.FUNCTION_TYPE_TIME_ACTUAL, "");
+		serverReturn.addParam(ClientBerkeley.FUNCTION_RECEIVE, ClientBerkeley.FUNCTION_TYPE_TIME_ACTUAL);
 
 		// mais ou menos isso aqui tem que enviar de tantos tem tantos tempos p todos os clientes		
-//		serverReturn.addParam("tempo", "3");
+//		serverReturn.addParam("ajuste", "30");
 //		serverReturn.addParam("sentido", ">");
 		// tem que fazer os ifs de resposta do cliente 
 		

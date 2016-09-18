@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.Calendar;
 import java.util.Random;
 import java.util.Scanner;
@@ -17,7 +17,8 @@ public class ClientBerkeley {
 	public static final String FUNCTION_TYPE_TIME_ACTUAL = "qual_seu_tempo";
 	public static final String FUNCTION_TYPE_TIME_ACTUAL_RESPONSE = "qual_seu_tempo_resposta";
 	public static final String FUNCTION_TYPE_CHANGE_MY_DATE = "mude_seu_timestamp";
-	private Timestamp currentTimestamp = new java.sql.Timestamp(Calendar.getInstance().getTime().getTime());
+	public static final String FUNCTION_TYPE_CHANGE_MY_DATE_RESPONSE = "ok";
+	private Timestamp currentTimestamp = new Timestamp();
 
 	public static void main(String[] args) {
 		ClientBerkeley client = new ClientBerkeley();
@@ -33,8 +34,10 @@ public class ClientBerkeley {
 			String nextLine = null;
 			while (serverReturn.hasNext()) { // fica escutando o server até ele morrer
 				nextLine = serverReturn.nextLine();				
-				ClientBerkleyReturn _return = (ClientBerkleyReturn) makeProcessRequest(nextLine); // tenho que fazer um construtor que receba o makeParams 
-				_return.socketReturn();
+				ClientBerkleyReturn _return = makeProcessRequest(server, nextLine); // tenho que fazer um construtor que receba o makeParams
+				if (_return != null) {
+					_return.socketReturn();
+				}
 			}
 		} catch (UnknownHostException e) {
 			e.printStackTrace();
@@ -49,7 +52,9 @@ public class ClientBerkeley {
 	 */
 	public Timestamp whyMyTime() {		
 		int random = getRamdomIntPositive();
-		currentTimestamp.setMinutes(random);
+		LocalDateTime dateTime = currentTimestamp.getDateTime();
+		dateTime.withMinute(random);
+		currentTimestamp.setDateTime(dateTime);
 		return currentTimestamp;
 	}
 
@@ -61,24 +66,36 @@ public class ClientBerkeley {
 		return new Random().nextInt((max + 1) - min) + min;
 	}
 
-	public MakeParams makeProcessRequest(String valueRequested) {
+	public ClientBerkleyReturn makeProcessRequest(Socket server, String valueRequested) {
 		ParseReturn parser = new ParseReturn(valueRequested);
 		String value = parser.getValue(FUNCTION_RECEIVE); // pega um valor para saber o que se esta requisitando
 		MakeParams params = new MakeParams();
 		if (value == null) {
 			System.out.println("valor da requisicao e nulo");
-			return params;
+			return null;
 		}
 		if (FUNCTION_TYPE_TIME_ACTUAL.equals(value)) { // está perguntando a data atual do cliente
-			Timestamp myTime = whyMyTime();
-			params.addParam(BerkeleyServer.K_TIME, myTime.toString());
 			params.addParam(FUNCTION_RECEIVE, FUNCTION_TYPE_TIME_ACTUAL_RESPONSE);
+			params.addParam(BerkeleyServer.K_TIME, whyMyTime().formatToString());
 		}
 		if (FUNCTION_TYPE_CHANGE_MY_DATE.equals(value)) {
-			
+			params.addParam(FUNCTION_RECEIVE, FUNCTION_TYPE_CHANGE_MY_DATE_RESPONSE);
+			String direction = parser.getValue(BerkeleyServer.K_DIRECTION);
+			String time = parser.getValue(BerkeleyServer.K_TIME);
+			changeMyTime(time, direction);
 		}
-		return params;
+		ClientBerkleyReturn clientReturn = new ClientBerkleyReturn(server);
+		clientReturn.setParams(params.getParams());
+		return clientReturn;
 	}
 
+	private void changeMyTime(String seconds, String direction) {
+		int iSeconds = Integer.parseInt(seconds);
+		if (BerkeleyServer.K_DIRECTION_MORE.equals(direction)) {
+			currentTimestamp.addSeconds(iSeconds);
+		} else if (BerkeleyServer.K_DIRECTION_LESS.equals(direction)) {
+			currentTimestamp.removeSeconds(iSeconds);
+		}
+	}
 
 }

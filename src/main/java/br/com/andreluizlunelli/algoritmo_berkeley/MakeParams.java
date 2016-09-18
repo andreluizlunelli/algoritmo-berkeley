@@ -9,6 +9,14 @@ import java.util.Map;
 
 public class MakeParams {
 	
+	public HashMap<String, String> getParams() {
+		return params;
+	}
+
+	public void setParams(HashMap<String, String> params) {
+		this.params = params;
+	}
+
 	protected HashMap<String, String> params = new HashMap<String, String>();
 	
 	public void addParam(String key, String value) {

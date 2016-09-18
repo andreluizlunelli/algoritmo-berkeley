@@ -25,4 +25,12 @@ public class TimestampTest {
 		Assert.assertEquals(timestamp.formatToString(), timestamp2.formatToString());
 	}
 	
+	@Test
+	public void testAdjustmentTime() {
+		Timestamp timestamp = Timestamp.newTimestamp("2016-09-17 19:44:33");
+		timestamp.addSeconds(30);
+		Assert.assertEquals("2016-09-17 19:45:03", timestamp.formatToString());
+		timestamp.addSeconds(-4);
+		Assert.assertEquals("2016-09-17 19:44:59", timestamp.formatToString());
+	}
 }

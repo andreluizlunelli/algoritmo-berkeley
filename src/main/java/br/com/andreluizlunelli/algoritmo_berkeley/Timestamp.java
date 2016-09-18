@@ -43,4 +43,12 @@ public class Timestamp {
 		this.formatter = formater;
 	}
 
+	public void addSeconds(int i) {
+		dateTime = dateTime.plusSeconds(i);		
+	}
+
+	public void removeSeconds(int i) {
+		dateTime = dateTime.minusSeconds(i);		
+	}
+	
 }
