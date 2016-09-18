@@ -6,6 +6,10 @@ public class ParseReturn {
 	private String return_;
 	private HashMap<String, String> params = new HashMap<String, String>();
 
+	/**
+	 * Formato esperado: chave:valor,
+	 * @param return_
+	 */
 	public ParseReturn(String return_) {
 		super();
 		this.return_ = return_;

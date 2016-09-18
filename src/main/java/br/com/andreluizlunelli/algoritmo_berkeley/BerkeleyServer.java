@@ -10,8 +10,13 @@ import java.util.Map;
 import java.util.Scanner;
 import java.util.Set;
 
+/**
+ * Classe Servidora
+ * 
+ */
 public class BerkeleyServer {
 
+	// chaves utilizadas para padronizar o retorno
 	public static String K_TIME = "tempo";
 	public static String K_DIRECTION = "direcao";	
 	
@@ -32,9 +37,9 @@ public class BerkeleyServer {
 		try {
 			server.socket = new ServerSocket(PORT_SERVER);
 			for (;;) {
-				Socket client = server.socket.accept();
-				BerkleyServerReturn returnBerkleyServer = server.requestAccepted(client);
-				returnBerkleyServer.socketReturn();
+				Socket client = server.socket.accept(); // fica escutando algum cliente se conectar
+				BerkleyServerReturn returnBerkleyServer = server.requestAccepted(client); // trata a requisição
+				returnBerkleyServer.socketReturn(); // responde o cliente escrevendo na inputstream
 			}
 			
 		} catch (IOException e) {

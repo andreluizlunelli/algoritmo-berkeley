@@ -16,6 +16,8 @@ public class ClientBerkeley {
 	public static final String FUNCTION_RECEIVE = "funcao";
 	public static final String FUNCTION_TYPE_TIME_ACTUAL = "qual_seu_tempo";
 	public static final String FUNCTION_TYPE_TIME_ACTUAL_RESPONSE = "qual_seu_tempo_resposta";
+	public static final String FUNCTION_TYPE_CHANGE_MY_DATE = "mude_seu_timestamp";
+	private Timestamp currentTimestamp = new java.sql.Timestamp(Calendar.getInstance().getTime().getTime());
 
 	public static void main(String[] args) {
 		ClientBerkeley client = new ClientBerkeley();
@@ -45,8 +47,7 @@ public class ClientBerkeley {
 	 * Retorna o timestamp atual alterado
 	 * @return
 	 */
-	public Timestamp whyMyTime() {
-		Timestamp currentTimestamp = new java.sql.Timestamp(Calendar.getInstance().getTime().getTime());
+	public Timestamp whyMyTime() {		
 		int random = getRamdomIntPositive();
 		currentTimestamp.setMinutes(random);
 		return currentTimestamp;
@@ -62,12 +63,19 @@ public class ClientBerkeley {
 
 	public MakeParams makeProcessRequest(String valueRequested) {
 		ParseReturn parser = new ParseReturn(valueRequested);
-		String value = parser.getValue(FUNCTION_RECEIVE);
+		String value = parser.getValue(FUNCTION_RECEIVE); // pega um valor para saber o que se esta requisitando
 		MakeParams params = new MakeParams();
-		if (value == FUNCTION_TYPE_TIME_ACTUAL) { // está perguntando a data atual para o cliente
+		if (value == null) {
+			System.out.println("valor da requisicao e nulo");
+			return params;
+		}
+		if (FUNCTION_TYPE_TIME_ACTUAL.equals(value)) { // está perguntando a data atual do cliente
 			Timestamp myTime = whyMyTime();
-			params.addParam("tempo", myTime.toString());
+			params.addParam(BerkeleyServer.K_TIME, myTime.toString());
 			params.addParam(FUNCTION_RECEIVE, FUNCTION_TYPE_TIME_ACTUAL_RESPONSE);
+		}
+		if (FUNCTION_TYPE_CHANGE_MY_DATE.equals(value)) {
+			
 		}
 		return params;
 	}

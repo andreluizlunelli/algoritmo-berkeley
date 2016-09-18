@@ -15,6 +15,10 @@ public class MakeParams {
 		params.put(key, value);
 	}
 	
+	/**
+	 * Formatar string de retorno
+	 * @return chave:valor,
+	 */
 	public String makeParamsReturn() {
 		String _return = "";
 		Iterator it = params.entrySet().iterator();
