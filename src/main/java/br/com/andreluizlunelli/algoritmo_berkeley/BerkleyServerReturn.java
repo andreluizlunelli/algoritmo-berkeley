@@ -21,9 +21,11 @@ public class BerkleyServerReturn extends MakeParams {
 	public void socketReturn() {
 		Iterator it = params.entrySet().iterator();
 		try {
+                    
 			PrintStream printer = new PrintStream(client.getOutputStream());
 			String _return = makeParamsReturn();
 			printer.println(_return);
+                        System.out.println(_return);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}			

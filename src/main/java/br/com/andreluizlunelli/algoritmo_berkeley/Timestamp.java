@@ -50,5 +50,17 @@ public class Timestamp {
 	public void removeSeconds(int i) {
 		dateTime = dateTime.minusSeconds(i);		
 	}
+        
+        public static long getDiffInSeconds(String date1, String date2)
+        {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern(Timestamp.PATTERN);
+
+            LocalDateTime dateTime1= LocalDateTime.parse(date1, formatter);
+            LocalDateTime dateTime2= LocalDateTime.parse(date2, formatter);
+            
+            long diff = java.time.Duration.between(dateTime1, dateTime2).getSeconds();
+
+            return diff;
+        }
 	
 }
