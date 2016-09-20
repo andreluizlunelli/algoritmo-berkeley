@@ -17,11 +17,11 @@ public class ClientBerkleyReturn extends MakeParams {
 	 * Escrever no console e cliente
 	 */
 	public void socketReturn() {
-		Iterator it = params.entrySet().iterator();
 		try {
 			PrintStream printer = new PrintStream(server.getOutputStream());
 			String _return = makeParamsReturn();
 			printer.println(_return);
+			System.out.println("Enviou para o server: \""+_return+"\"");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}			

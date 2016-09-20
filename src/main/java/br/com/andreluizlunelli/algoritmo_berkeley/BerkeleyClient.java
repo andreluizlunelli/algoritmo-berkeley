@@ -9,11 +9,13 @@ import java.util.Calendar;
 import java.util.Random;
 import java.util.Scanner;
 
-public class ClientBerkeley {
+public class BerkeleyClient {
 	
 	public static final String IP_SERVER = "127.0.0.1";
 	public static final int PORT_SERVER = 9999;
+	public static final String FUNCTION_TYPE_START = "1";
 	public static final String FUNCTION_RECEIVE = "funcao";
+	public static final String FUNCTION_TYPE_OK = "OK";
 	public static final String FUNCTION_TYPE_TIME_ACTUAL = "qual_seu_tempo";
 	public static final String FUNCTION_TYPE_TIME_ACTUAL_RESPONSE = "qual_seu_tempo_resposta";
 	public static final String FUNCTION_TYPE_CHANGE_MY_DATE = "mude_seu_timestamp";
@@ -21,15 +23,15 @@ public class ClientBerkeley {
 	private Timestamp currentTimestamp = new Timestamp();
 
 	public static void main(String[] args) {
-		ClientBerkeley client = new ClientBerkeley();
+		BerkeleyClient client = new BerkeleyClient();
 		client.connect();
 	}
 
 	public void connect() {
-		try {			
+		try {		
 			Socket server = new Socket(IP_SERVER, PORT_SERVER);
 			PrintStream printer = new PrintStream(server.getOutputStream());
-			printer.println("c:1,"); // manda um valor para se conectar
+			printer.println(createInitValueToConnect()); // manda um valor para se conectar
 			Scanner serverReturn = new Scanner(server.getInputStream());
 			String nextLine = null;
 			while (serverReturn.hasNext()) { // fica escutando o server até ele morrer
@@ -74,6 +76,11 @@ public class ClientBerkeley {
 			System.out.println("valor da requisicao e nulo");
 			return null;
 		}
+		/**
+		 * 
+		 * CONTROLA A LEITURA E RESPOSTA PARA O SERVIDOR
+		 * 
+		 */
 		if (FUNCTION_TYPE_TIME_ACTUAL.equals(value)) { // está perguntando a data atual do cliente
 			params.addParam(FUNCTION_RECEIVE, FUNCTION_TYPE_TIME_ACTUAL_RESPONSE);
 			params.addParam(BerkeleyServer.K_TIME, whyMyTime().formatToString());
@@ -96,6 +103,13 @@ public class ClientBerkeley {
 		} else if (BerkeleyServer.K_DIRECTION_LESS.equals(direction)) {
 			currentTimestamp.removeSeconds(iSeconds);
 		}
+	}
+	
+	private String createInitValueToConnect() {
+		MakeParams makeParams = new MakeParams();
+		makeParams.addParam(FUNCTION_RECEIVE, "1");
+		String _return = makeParams.makeParamsReturn();
+		return _return;
 	}
 
 }

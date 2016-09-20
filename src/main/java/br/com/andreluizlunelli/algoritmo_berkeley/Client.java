@@ -1,14 +1,15 @@
 package br.com.andreluizlunelli.algoritmo_berkeley;
 
 import java.io.PrintStream;
+import java.net.Socket;
 
 public class Client {
 	private String host;
-	private PrintStream stream;
-	public Client(String host, PrintStream stream) {
+	private Socket socket;
+	public Client(String host, Socket socket) {
 		super();
 		this.host = host;
-		this.stream = stream;
+		this.socket = socket;
 	}
 	public String getHost() {
 		return host;
@@ -16,10 +17,11 @@ public class Client {
 	public void setHost(String host) {
 		this.host = host;
 	}
-	public PrintStream getStream() {
-		return stream;
+	public Socket getSocket() {
+		return socket;
 	}
-	public void setStream(PrintStream stream) {
-		this.stream = stream;
-	}	
+	public void setSocket(Socket socket) {
+		this.socket = socket;
+	}
+	
 }

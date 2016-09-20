@@ -16,7 +16,7 @@ public class ClientBerkeleyTest {
 	 * Teste: simula o cliente recebendo uma requisição do server com a mensagem de retornar tempo atual
 	 */
 	public void test02() {
-		ClientBerkeley client = new ClientBerkeley();
+		BerkeleyClient client = new BerkeleyClient();
 //		MakeParams params = client.makeProcessRequest(FUNCTION_TIME_ACTUAL);
 		// tenho que retornar esses parametros para o server
 	}

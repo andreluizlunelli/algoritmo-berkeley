@@ -22,7 +22,7 @@ public class MakeParams {
 	public void addParam(String key, String value) {
 		params.put(key, value);
 	}
-	
+		
 	/**
 	 * Formatar string de retorno
 	 * @return chave:valor,
@@ -32,7 +32,7 @@ public class MakeParams {
 		Iterator it = params.entrySet().iterator();
 		while (it.hasNext()) {
 			Map.Entry pair = (Map.Entry)it.next();
-			_return += String.format("%s:%s,", pair.getKey(), pair.getValue());
+			_return += String.format("%s%s%s%s", pair.getKey(), ParseReturn.VALUE_SEPARATOR, pair.getValue(), ParseReturn.COLUMN_SEPARATOR);
 		}
 		return _return;
 	}
