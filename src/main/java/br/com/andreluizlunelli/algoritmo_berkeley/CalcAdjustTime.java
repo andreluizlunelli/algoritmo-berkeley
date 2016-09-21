@@ -29,10 +29,9 @@ public class CalcAdjustTime {
 		return sum / i;
 	}
 
-	public MakeParams calc(Client client) {
+	private MakeParams calc(long secondsCli) {
 		MakeParams params = new MakeParams();
 		long average = averageSeconds();
-		long secondsCli = client.getTimestamp().getSecondsTotal();
 		long sub = average - secondsCli; 		
 		if (sub > 0) { // é positivo, o cliente tem que ajustar a hora dele pra cima
 			params.addParam(BerkeleyServer.K_ADJUSTMENT, String.valueOf(sub));
@@ -42,6 +41,14 @@ public class CalcAdjustTime {
 			params.addParam(BerkeleyServer.K_DIRECTION, BerkeleyServer.K_DIRECTION_LESS);
 		}
 		return params;
+	}
+	
+	public MakeParams calc(Client client) {
+		return calc(client.getTimestamp().getSecondsTotal());
+	}
+	
+	public MakeParams calc(BerkeleyServer server) {
+		return calc(server.getCurrentTimestamp().getSecondsTotal());
 	}
 
 }

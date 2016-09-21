@@ -21,6 +21,7 @@ public class BerkeleyClient {
 	public static final String FUNCTION_TYPE_CHANGE_MY_DATE = "mude_seu_timestamp";
 	public static final String FUNCTION_TYPE_CHANGE_MY_DATE_RESPONSE = "OK MUDEI";
 	private Timestamp currentTimestamp = new Timestamp();
+	private TimeAdjuster timeAdjuster = new TimeAdjuster();
 
 	public static void main(String[] args) {
 		BerkeleyClient client = new BerkeleyClient();
@@ -54,10 +55,10 @@ public class BerkeleyClient {
 	 */
 	public Timestamp whyMyTime() {		
 		int random = getRamdomIntPositive();
-		LocalDateTime dateTime = currentTimestamp.getDateTime();
+		LocalDateTime dateTime = getCurrentTimestamp().getDateTime();
 		dateTime.withMinute(random);
-		currentTimestamp.setDateTime(dateTime);
-		return currentTimestamp;
+		getCurrentTimestamp().setDateTime(dateTime);
+		return getCurrentTimestamp();
 	}
 
 	private int getRamdomIntPositive() {		
@@ -85,32 +86,33 @@ public class BerkeleyClient {
 			params.addParam(FUNCTION_RECEIVE, FUNCTION_TYPE_TIME_ACTUAL_RESPONSE);
 			params.addParam(BerkeleyServer.K_TIME, whyMyTime().formatToString());
 		} else if (FUNCTION_TYPE_CHANGE_MY_DATE.equals(value)) {
-			params.addParam(FUNCTION_RECEIVE, FUNCTION_TYPE_CHANGE_MY_DATE_RESPONSE);
+			params.addParam(FUNCTION_RECEIVE, FUNCTION_TYPE_CHANGE_MY_DATE_RESPONSE); // responde ok p o server
 			String direction = parser.getValue(BerkeleyServer.K_DIRECTION);
-			String time = parser.getValue(BerkeleyServer.K_ADJUSTMENT);
-			changeMyTime(time, direction);
+			int second = Integer.valueOf(parser.getValue(BerkeleyServer.K_ADJUSTMENT));
+			adjustMyTime(direction, second);
 		}
 		ClientBerkleyReturn clientReturn = new ClientBerkleyReturn(server);
 		clientReturn.setParams(params.getParams());
 		return clientReturn;
 	}
 
-	private void changeMyTime(String seconds, String direction) {
-		int iSeconds = Integer.parseInt(seconds);
-		if (BerkeleyServer.K_DIRECTION_MORE.equals(direction)) {
-			currentTimestamp.addSeconds(iSeconds);
-		} else if (BerkeleyServer.K_DIRECTION_LESS.equals(direction)) {
-			currentTimestamp.removeSeconds(iSeconds);
-		} else {
-			System.out.println("Deu algum pau na direcao do ajuste do tempo");
-		}
-	}
-	
 	private String createInitValueToConnect() {
 		MakeParams makeParams = new MakeParams();
 		makeParams.addParam(FUNCTION_RECEIVE, "1");
 		String _return = makeParams.makeParamsReturn();
 		return _return;
+	}
+
+	public Timestamp getCurrentTimestamp() {
+		return currentTimestamp;
+	}
+
+	public void setCurrentTimestamp(Timestamp currentTimestamp) {
+		this.currentTimestamp = currentTimestamp;
+	}
+
+	public void adjustMyTime(String direction, int second) {
+		timeAdjuster.adjustTimestamp(this, direction, second);
 	}
 
 }

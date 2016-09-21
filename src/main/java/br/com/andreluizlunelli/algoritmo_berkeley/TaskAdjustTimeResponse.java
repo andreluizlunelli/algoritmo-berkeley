@@ -39,7 +39,8 @@ public class TaskAdjustTimeResponse extends Thread {
 		}
 		
 		// TODO faz o ajuste do server tambem
-//		berkeleyServer.adjustTime(seconds, direction);
+		params = calcAdjustTime.calc(berkeleyServer);
+		berkeleyServer.adjustMyTime(params);
 	}
 	
 }

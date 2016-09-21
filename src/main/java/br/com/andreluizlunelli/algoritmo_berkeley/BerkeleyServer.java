@@ -30,12 +30,13 @@ public class BerkeleyServer {
 	public static String K_DIRECTION_MORE = ">";
 	public static String K_DIRECTION_LESS = "<";
 
+	private static BerkeleyServer server;
+	private static final int PORT_SERVER = 9999;
+	private ServerSocket socket;
 	private List<Timestamp> listTimesClients = new Vector();	
 	private HashMap<String, Client> mapClients = new HashMap<String, Client>();
 	private Timestamp currentTimestamp = new Timestamp();
-	private ServerSocket socket;
-	private static BerkeleyServer server;
-	private static final int PORT_SERVER = 9999;
+	private TimeAdjuster timeAdjuster = new TimeAdjuster();
 	
 	public static void main(String[] args) {
 		BerkeleyServer.start();
@@ -110,7 +111,7 @@ public class BerkeleyServer {
 //			serverReturn.addParam("ajuste", "30");
 //			serverReturn.addParam("sentido", ">");
 			List<Timestamp> tmpListTimes = getListTimesClients();
-			tmpListTimes.add(this.currentTimestamp);
+			tmpListTimes.add(this.getCurrentTimestamp());
 			new TaskAdjustTimeResponse(tmpListTimes, getClients(), this).start();
 		}
 	}
@@ -158,6 +159,18 @@ public class BerkeleyServer {
 
 	public void sayHello() {
 		System.out.println("Hi");
+	}
+
+	public Timestamp getCurrentTimestamp() {
+		return currentTimestamp;
+	}
+
+	public void setCurrentTimestamp(Timestamp currentTimestamp) {
+		this.currentTimestamp = currentTimestamp;
+	}
+	
+	public void adjustMyTime(MakeParams params) {
+		timeAdjuster.adjustTimestamp(this, params);
 	}
 	
 }
