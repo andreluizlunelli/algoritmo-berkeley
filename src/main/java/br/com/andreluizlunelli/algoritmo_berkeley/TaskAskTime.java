@@ -13,7 +13,7 @@ import java.util.TimerTask;
 public class TaskAskTime extends TimerTask {
 	
 	private Timer timer = new Timer();
-	private final int time = 1000 * 30;
+	private final int time = 1000 * 20;
 	
 	public TaskAskTime() {
 		super();

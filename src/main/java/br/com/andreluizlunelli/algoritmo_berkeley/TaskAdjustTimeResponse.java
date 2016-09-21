@@ -24,20 +24,21 @@ public class TaskAdjustTimeResponse extends Thread {
 		super.run();
 		Iterator<Entry<String, Client>> it = clients.entrySet().iterator();
 		BerkleyServerReturn serverReturn;
-		MakeParams params = calcAdjustTime.calc(timestamps);
-		params.addParam(BerkeleyServer.K_ADJUSTMENT, "60");
-		params.addParam(BerkeleyServer.K_DIRECTION, BerkeleyServer.K_DIRECTION_MORE);
+		calcAdjustTime = new CalcAdjustTime(timestamps);
+		MakeParams params;
 		while (it.hasNext()) {
 			Entry<String, Client> entry = it.next();
 			Client client = entry.getValue();
+			params = calcAdjustTime.calc(client);
 			System.out.println("Respondendo o fator de ajuste para o cliente: "+client.getHost());
 			// fazer uma função que retorna o makeparams e uso ele p responder os clientes e o server
 			serverReturn = new BerkleyServerReturn(client.getSocket());
 			serverReturn.setParams(params.getParams());
+			serverReturn.addParam(BerkeleyClient.FUNCTION_RECEIVE, BerkeleyClient.FUNCTION_TYPE_CHANGE_MY_DATE);
 			serverReturn.socketReturn();
 		}
 		
-		// faz o ajuste do server tambem
+		// TODO faz o ajuste do server tambem
 //		berkeleyServer.adjustTime(seconds, direction);
 	}
 	

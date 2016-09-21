@@ -2,6 +2,7 @@ package br.com.andreluizlunelli.algoritmo_berkeley;
 
 import java.io.IOException;
 import java.io.PrintStream;
+import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.sql.Time;
@@ -24,8 +25,8 @@ public class BerkeleyServer {
 
 	// chaves utilizadas para padronizar o retorno
 	public static String K_TIME = "tempo";
-	public static String K_DIRECTION = "direcao";
 	public static String K_ADJUSTMENT = "ajuste";
+	public static String K_DIRECTION = "direcao";
 	public static String K_DIRECTION_MORE = ">";
 	public static String K_DIRECTION_LESS = "<";
 
@@ -101,6 +102,8 @@ public class BerkeleyServer {
 			throw new IllegalArgumentException("Data de envio do cliente nao pode ser vazio");
 		}
 		Timestamp timestamp = Timestamp.newTimestamp(dateString);
+		String host = client.getInetAddress().getHostName();
+		getClients().get(host).setTimestamp(timestamp);
 		addTimestamp(timestamp);
 		if (getListTimesClients().size() == getClients().size()) {
 			// dispara a thread para calcular a media do ajuste e enviar aos clientes
@@ -129,7 +132,7 @@ public class BerkeleyServer {
 	}
 
 	private synchronized void addClient(Socket socket) throws IOException {
-		Client client = new Client(socket.getInetAddress().getHostName(), socket);
+		Client client = new Client(socket.getInetAddress().getHostName(), socket, null);
 		mapClients.put(client.getHost(), client);
 	}
 

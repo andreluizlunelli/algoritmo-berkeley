@@ -5,6 +5,7 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.TemporalAccessor;
 import java.util.Date;
@@ -35,6 +36,13 @@ public class Timestamp {
 		return timestamp;
 	}
 
+	public static Timestamp newTimestampFromSeconds(long seconds) {
+		Timestamp timestamp = new Timestamp();
+		LocalDateTime ofEpochSecond = LocalDateTime.ofEpochSecond(seconds, 0, ZoneOffset.ofTotalSeconds(0));
+		timestamp.setDateTime(ofEpochSecond);
+		return timestamp;
+	}
+	
 	public DateTimeFormatter getFormater() {
 		return formatter;
 	}
@@ -51,16 +59,8 @@ public class Timestamp {
 		dateTime = dateTime.minusSeconds(i);		
 	}
         
-        public static long getDiffInSeconds(String date1, String date2)
-        {
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern(Timestamp.PATTERN);
-
-            LocalDateTime dateTime1= LocalDateTime.parse(date1, formatter);
-            LocalDateTime dateTime2= LocalDateTime.parse(date2, formatter);
-            
-            long diff = java.time.Duration.between(dateTime1, dateTime2).getSeconds();
-
-            return diff;
-        }
-	
+    public long getSecondsTotal() {
+    	return (this.getDateTime().toInstant(ZoneOffset.ofTotalSeconds(0)).toEpochMilli() / 1000);
+    }
+    
 }

@@ -22,6 +22,10 @@ public class MakeParams {
 	public void addParam(String key, String value) {
 		params.put(key, value);
 	}
+	
+	public String getValue(String key) {
+		return params.get(key);
+	}
 		
 	/**
 	 * Formatar string de retorno

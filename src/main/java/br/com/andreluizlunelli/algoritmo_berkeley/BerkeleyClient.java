@@ -19,7 +19,7 @@ public class BerkeleyClient {
 	public static final String FUNCTION_TYPE_TIME_ACTUAL = "qual_seu_tempo";
 	public static final String FUNCTION_TYPE_TIME_ACTUAL_RESPONSE = "qual_seu_tempo_resposta";
 	public static final String FUNCTION_TYPE_CHANGE_MY_DATE = "mude_seu_timestamp";
-	public static final String FUNCTION_TYPE_CHANGE_MY_DATE_RESPONSE = "ok";
+	public static final String FUNCTION_TYPE_CHANGE_MY_DATE_RESPONSE = "OK MUDEI";
 	private Timestamp currentTimestamp = new Timestamp();
 
 	public static void main(String[] args) {
@@ -84,11 +84,10 @@ public class BerkeleyClient {
 		if (FUNCTION_TYPE_TIME_ACTUAL.equals(value)) { // está perguntando a data atual do cliente
 			params.addParam(FUNCTION_RECEIVE, FUNCTION_TYPE_TIME_ACTUAL_RESPONSE);
 			params.addParam(BerkeleyServer.K_TIME, whyMyTime().formatToString());
-		}
-		if (FUNCTION_TYPE_CHANGE_MY_DATE.equals(value)) {
+		} else if (FUNCTION_TYPE_CHANGE_MY_DATE.equals(value)) {
 			params.addParam(FUNCTION_RECEIVE, FUNCTION_TYPE_CHANGE_MY_DATE_RESPONSE);
 			String direction = parser.getValue(BerkeleyServer.K_DIRECTION);
-			String time = parser.getValue(BerkeleyServer.K_TIME);
+			String time = parser.getValue(BerkeleyServer.K_ADJUSTMENT);
 			changeMyTime(time, direction);
 		}
 		ClientBerkleyReturn clientReturn = new ClientBerkleyReturn(server);
@@ -102,6 +101,8 @@ public class BerkeleyClient {
 			currentTimestamp.addSeconds(iSeconds);
 		} else if (BerkeleyServer.K_DIRECTION_LESS.equals(direction)) {
 			currentTimestamp.removeSeconds(iSeconds);
+		} else {
+			System.out.println("Deu algum pau na direcao do ajuste do tempo");
 		}
 	}
 	
