@@ -1,2 +1,2 @@
 # algoritmo-berkeley
-Algoritmo de “servidor de tempo” 
+Algoritmo de servidor de tempo
